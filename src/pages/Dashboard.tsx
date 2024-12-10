@@ -166,35 +166,17 @@ const ProgressIndicator = styled(Box)(({ theme }) => ({
   border: '1px solid rgba(3, 4, 94, 0.08)',
 }));
 
+const StyledContainer = styled(Container)`
+  padding: 24px;
+`;
+
+const ContentContainer = styled(Box)`
+  margin-top: 24px;
+`;
+
 const Dashboard = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [progress, setProgress] = useState({
-    teoricas: 30,
-    simulador: 4,
-  });
-
-  const [achievements, setAchievements] = useState([
-    {
-      title: 'Primeira Aula Concluída',
-      description: 'Você completou sua primeira aula teórica!',
-      icon: <SchoolIcon />,
-      unlocked: true,
-    },
-    {
-      title: 'Dedicação aos Estudos',
-      description: '10 horas de aulas teóricas concluídas',
-      icon: <LibraryIcon />,
-      unlocked: true,
-    },
-    {
-      title: 'Mestre do Simulador',
-      description: 'Completou 5 horas no simulador',
-      icon: <TrophyIcon />,
-      unlocked: false,
-    },
-  ]);
+  const [achievements] = useState([]);
 
   useEffect(() => {
     // Simulando dados do progresso

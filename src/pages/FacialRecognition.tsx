@@ -7,7 +7,6 @@ import {
   Container,
   Typography,
   Card,
-  CardContent,
   styled,
   CircularProgress,
   useTheme,

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../images/logo-removebg-preview.png';
+import logo from '@/assets/images/logo-removebg-preview.png';
 import {
   Box,
   Container,
@@ -18,10 +18,6 @@ import {
   useTheme,
   useMediaQuery,
   Paper,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Accordion,
   AccordionSummary,
   AccordionDetails,

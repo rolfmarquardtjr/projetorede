@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/vida-cidada/',
+  base: '/vida/',
   server: {
     port: 3000,
     open: true

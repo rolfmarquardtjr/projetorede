@@ -22,9 +22,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   List,
   ListItem,
   ListItemIcon,
@@ -54,7 +51,6 @@ import {
   Timer as TimeIcon,
   PlayArrow as PlayArrowIcon,
   Close as CloseIcon,
-  ExpandMore as ExpandMoreIcon,
 } from '@mui/icons-material';
 
 const DashboardContainer = styled(Container)(({ theme }) => ({
@@ -68,39 +64,9 @@ const WelcomeCard = styled(Card)(({ theme }) => ({
   marginBottom: theme.spacing(4),
 }));
 
-const ProgressCard = styled(Card)(({ theme }) => ({
-  height: '100%',
-  position: 'relative',
-  overflow: 'visible',
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: '4px',
-    background: theme.palette.primary.main,
-    borderRadius: '4px 4px 0 0',
-  },
-}));
-
 const StyledTimelineItem = styled(TimelineItem)(({ theme }) => ({
   '&:before': {
     display: 'none',
-  },
-}));
-
-const AchievementCard = styled(Card)(({ theme }) => ({
-  position: 'relative',
-  overflow: 'hidden',
-  '&::after': {
-    content: '""',
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    width: '30%',
-    height: '100%',
-    background: `linear-gradient(90deg, transparent, ${theme.palette.background.paper})`,
   },
 }));
 
@@ -135,14 +101,6 @@ const StyledCard = styled(Card)(({ theme }) => ({
     transform: 'translateY(-4px)',
     boxShadow: '0 8px 16px rgba(0,0,0,0.1)',
   },
-}));
-
-const ProgressSection = styled(Card)(({ theme }) => ({
-  padding: theme.spacing(3),
-  borderRadius: 24,
-  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-  background: '#fff',
-  marginBottom: theme.spacing(4),
 }));
 
 const ProgressBar = styled(LinearProgress)(({ theme }) => ({

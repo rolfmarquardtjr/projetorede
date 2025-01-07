@@ -157,10 +157,12 @@ const ScheduleSimulator = () => {
     ],
   };
 
-  const handleDateChange = (date: Date) => {
-    setSelectedDate(date);
-    setActiveStep(1);
-    setSelectedTime(null);
+  const handleDateChange = (value: any) => {
+    if (value instanceof Date) {
+      setSelectedDate(value);
+      setActiveStep(1);
+      setSelectedTime(null);
+    }
   };
 
   const handleTimeSelection = (time: string, vehicleType: 'car' | 'motorcycle', simulator: string, instructor: string) => {

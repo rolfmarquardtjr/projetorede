@@ -22,8 +22,8 @@ import {
   Lock,
 } from '@mui/icons-material';
 import { toast } from 'react-toastify';
-import GovBrLogo from '../images/gov.br-logo.png';
-import entradaImg from '../images/entrada_correta.png';
+import GovBrLogo from '@/assets/images/gov.br-logo.png';
+import entradaImg from '@/assets/images/entrada_correta.png';
 
 const LoginContainer = styled(Container)(({ theme }) => ({
   minHeight: '100vh',

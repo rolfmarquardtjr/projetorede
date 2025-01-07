@@ -27,7 +27,6 @@ import {
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
-  School as SchoolIcon,
   PlayArrow as PlayArrowIcon,
   CheckCircle as CheckIcon,
   MenuBook as MenuBookIcon,
@@ -38,9 +37,6 @@ import {
   Close as CloseIcon,
   QrCode2 as QrCodeIcon,
   DirectionsCar as CarIcon,
-  Traffic as TrafficIcon,
-  NightsStay as NightIcon,
-  Visibility as VisibilityIcon,
   Assessment as AssessmentIcon,
 } from '@mui/icons-material';
 import { toast } from 'react-toastify';
@@ -48,16 +44,6 @@ import { toast } from 'react-toastify';
 const PageContainer = styled(Container)(({ theme }) => ({
   paddingTop: theme.spacing(4),
   paddingBottom: theme.spacing(4),
-}));
-
-const StyledCard = styled(Card)(({ theme }) => ({
-  borderRadius: 24,
-  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
-  height: '100%',
-  transition: 'transform 0.2s ease-in-out',
-  '&:hover': {
-    transform: 'translateY(-4px)',
-  },
 }));
 
 const ProgressCard = styled(Card)(({ theme }) => ({
@@ -107,14 +93,6 @@ const StatItem = styled(Box)(({ theme }) => ({
   }
 }));
 
-const ActionButton = styled(Button)(({ theme }) => ({
-  borderRadius: 12,
-  padding: theme.spacing(2),
-  gap: theme.spacing(2),
-  textTransform: 'none',
-  fontSize: '1.1rem',
-}));
-
 const ModuleCard = styled(Card)(({ theme }) => ({
   marginBottom: theme.spacing(2),
   border: '1px solid rgba(3, 4, 94, 0.2)',
@@ -152,17 +130,6 @@ const ResultDialog = styled(Dialog)(({ theme }) => ({
     padding: theme.spacing(2),
     maxWidth: '90vw',
     maxHeight: '90vh',
-  },
-}));
-
-const StatChip = styled(Chip)(({ theme }) => ({
-  backgroundColor: 'rgba(3, 4, 94, 0.08)',
-  borderRadius: 12,
-  padding: theme.spacing(1),
-  '& .MuiChip-label': {
-    display: 'flex',
-    alignItems: 'center',
-    gap: theme.spacing(1),
   },
 }));
 
@@ -215,7 +182,7 @@ const SIMULATOR_MODULES: SimulatorModule[] = [
     duration: '50 minutos',
     requirements: ['Posição de dirigir', 'Regulagem de equipamentos', 'Comandos do veículo'],
     completed: true,
-    result: 'https://exemplo.com/resultado-modulo1.pdf',
+    result: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
   },
   {
     id: 2,
@@ -224,7 +191,7 @@ const SIMULATOR_MODULES: SimulatorModule[] = [
     duration: '50 minutos',
     requirements: ['Embreagem e câmbio', 'Frenagem', 'Direção defensiva básica'],
     completed: true,
-    result: 'https://exemplo.com/resultado-modulo2.pdf',
+    result: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
   },
   {
     id: 3,
@@ -242,7 +209,7 @@ const SIMULATOR_MODULES: SimulatorModule[] = [
     duration: '50 minutos',
     requirements: ['Direção noturna', 'Uso de faróis', 'Situações de baixa visibilidade'],
     completed: false,
-    result: 'https://exemplo.com/resultado-modulo4.pdf',
+    result: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
   },
   {
     id: 5,
@@ -251,7 +218,7 @@ const SIMULATOR_MODULES: SimulatorModule[] = [
     duration: '50 minutos',
     requirements: ['Situações de risco', 'Manobras especiais', 'Condições adversas'],
     completed: false,
-    result: 'https://exemplo.com/resultado-modulo5.pdf',
+    result: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
   },
 ];
 
@@ -268,15 +235,18 @@ const LastLesson = () => {
   const progress = (SIMULATOR_MODULES.filter(module => module.completed).length / SIMULATOR_MODULES.length) * 100;
 
   const handleStartModule = (module: SimulatorModule) => {
+    if (module.completed) {
+      handleViewResult(module);
+      return;
+    }
+    
     setSelectedModule(module);
     setLoading(true);
     setQrDialogOpen(true);
-    // Simulando detecção do QR Code
     setTimeout(() => {
       setLoading(false);
       toast.success(`${module.title} iniciado com sucesso!`);
       setQrDialogOpen(false);
-      // Aqui você redirecionaria para a interface do simulador
     }, 3000);
   };
 
@@ -295,21 +265,27 @@ const LastLesson = () => {
   };
 
   // Tutorial steps
-  const tutorialSteps = [
+  interface TutorialStep {
+    target: string;
+    content: string;
+    placement: 'top' | 'bottom' | 'left' | 'right';
+  }
+
+  const tutorialSteps: TutorialStep[] = [
     {
       target: '.module-card',
       content: 'Aqui você encontra os módulos do simulador. Cada módulo tem um tema específico para sua prática.',
-      placement: 'top',
+      placement: 'top' as const,
     },
     {
       target: '.progress-section',
       content: 'Acompanhe seu progresso geral e veja quanto falta para completar o curso.',
-      placement: 'bottom',
+      placement: 'bottom' as const,
     },
     {
       target: '.action-buttons',
       content: 'Use estes botões para iniciar uma aula ou ver resultados anteriores.',
-      placement: 'left',
+      placement: 'left' as const,
     },
   ];
 

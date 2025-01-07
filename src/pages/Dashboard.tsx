@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../images/logo-removebg-preview.png';
+import logo from '@/assets/images/logo-removebg-preview.png';
 import {
   Box,
   Container,
@@ -29,6 +29,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Radio,
 } from '@mui/material';
 import {
   Timeline,
@@ -174,6 +175,82 @@ const Dashboard = () => {
     teoricas: 30,
     simulador: 4,
   });
+
+  // Novo estado para o simulado
+  const [openSimulado, setOpenSimulado] = useState(false);
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState<{[key: number]: string}>({});
+  const [showResults, setShowResults] = useState(false);
+
+  // Dados mocados do simulado
+  const simuladoQuestions = [
+    {
+      question: "Qual é a velocidade máxima permitida em vias arteriais urbanas?",
+      options: [
+        "40 km/h",
+        "60 km/h",
+        "80 km/h",
+        "100 km/h"
+      ],
+      correct: "60 km/h"
+    },
+    {
+      question: "O que significa a placa de sinalização R-1?",
+      options: [
+        "Pare",
+        "Dê a preferência",
+        "Sentido proibido",
+        "Proibido estacionar"
+      ],
+      correct: "Pare"
+    },
+    {
+      question: "Qual é a validade da Carteira Nacional de Habilitação (CNH) para condutores com idade inferior a 50 anos?",
+      options: [
+        "5 anos",
+        "10 anos",
+        "3 anos",
+        "2 anos"
+      ],
+      correct: "10 anos"
+    },
+  ];
+
+  const handleAnswerSelect = (answer: string) => {
+    setAnswers({
+      ...answers,
+      [currentQuestion]: answer
+    });
+  };
+
+  const handleNextQuestion = () => {
+    if (currentQuestion < simuladoQuestions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
+    } else {
+      setShowResults(true);
+    }
+  };
+
+  const handleCloseSimulado = () => {
+    setOpenSimulado(false);
+    setCurrentQuestion(0);
+    setAnswers({});
+    setShowResults(false);
+  };
+
+  const calculateResults = () => {
+    let correct = 0;
+    Object.keys(answers).forEach((questionIndex) => {
+      if (answers[Number(questionIndex)] === simuladoQuestions[Number(questionIndex)].correct) {
+        correct++;
+      }
+    });
+    return {
+      total: simuladoQuestions.length,
+      correct,
+      percentage: (correct / simuladoQuestions.length) * 100
+    };
+  };
 
   const [achievements, setAchievements] = useState([
     {
@@ -521,6 +598,7 @@ const Dashboard = () => {
                     variant="outlined"
                     color="primary"
                     startIcon={<AssignmentIcon />}
+                    onClick={() => setOpenSimulado(true)}
                     sx={{ borderRadius: 3 }}
                   >
                     Fazer Simulado
@@ -574,6 +652,104 @@ const Dashboard = () => {
           </StyledCard>
         </Grid>
       </Grid>
+
+      <Dialog
+        open={openSimulado}
+        onClose={handleCloseSimulado}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            {showResults ? "Resultados do Simulado" : "Simulado de Legislação"}
+            <IconButton onClick={handleCloseSimulado}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          {!showResults ? (
+            <Box>
+              <Typography variant="h6" gutterBottom>
+                Questão {currentQuestion + 1} de {simuladoQuestions.length}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                {simuladoQuestions[currentQuestion].question}
+              </Typography>
+              <List>
+                {simuladoQuestions[currentQuestion].options.map((option, index) => (
+                  <ListItem
+                    key={index}
+                    onClick={() => handleAnswerSelect(option)}
+                    sx={{
+                      cursor: 'pointer',
+                      bgcolor: answers[currentQuestion] === option ? 'primary.light' : 'transparent',
+                      borderRadius: 1,
+                      '&:hover': {
+                        bgcolor: 'primary.light',
+                      },
+                    }}
+                  >
+                    <ListItemIcon>
+                      <Radio
+                        checked={answers[currentQuestion] === option}
+                        onChange={() => handleAnswerSelect(option)}
+                      />
+                    </ListItemIcon>
+                    <ListItemText primary={option} />
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          ) : (
+            <Box>
+              <Typography variant="h6" gutterBottom>
+                Resultado Final
+              </Typography>
+              <Box sx={{ textAlign: 'center', my: 3 }}>
+                <Typography variant="h4" color="primary">
+                  {calculateResults().percentage}%
+                </Typography>
+                <Typography variant="body1">
+                  Você acertou {calculateResults().correct} de {calculateResults().total} questões
+                </Typography>
+              </Box>
+              <List>
+                {simuladoQuestions.map((question, index) => (
+                  <ListItem key={index}>
+                    <ListItemIcon>
+                      {answers[index] === question.correct ? (
+                        <CheckCircleIcon color="success" />
+                      ) : (
+                        <CloseIcon color="error" />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={question.question}
+                      secondary={`Sua resposta: ${answers[index] || 'Não respondida'} | Resposta correta: ${question.correct}`}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          {!showResults ? (
+            <Button
+              variant="contained"
+              onClick={handleNextQuestion}
+              disabled={!answers[currentQuestion]}
+            >
+              {currentQuestion === simuladoQuestions.length - 1 ? 'Finalizar' : 'Próxima'}
+            </Button>
+          ) : (
+            <Button variant="contained" onClick={handleCloseSimulado}>
+              Fechar
+            </Button>
+          )}
+        </DialogActions>
+      </Dialog>
     </DashboardContainer>
   );
 };
